@@ -12,12 +12,13 @@ int main() {
         printf("Child Process: PID = %d Parent Process: PID = %d\n", getpid(),getppid()); 
         printf("child executed\n");} 
     else if (pid > 0) {
-        printf("Parent Process: PID = %d parents parent Process: PID = %d\n", getpid(),getppid());
-        wait(NULL);        
+        printf("Parent Process: PID = %d parents parent Process: PID = %d\n", getpid(),getppid());      
         printf("parent executed\n");} 
     else {
         perror("fork failed");}
     count++;
-    printf("count: %d\n",count);
+    printf("count is: %d\n",count); //the global variable doesnt reflect the change done in child process
+    printf("child pid is: %d\n",wait(NULL)); //wait joins and returns the childs pid when parent is running
+    printf("who did this, %d\n",getpid());
     return 0;
 }
