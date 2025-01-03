@@ -2,28 +2,27 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-int count=0;
-
+#include <errno.h>
 int main() {
     pid_t pid1 = fork();
-
-     if(pid1==0)
-     printf("this is child PID = %d of parent PID = %d\n", getpid(),getppid()); 
-     else
-     printf("parent exec %d\n",getpid());
-    
     pid_t pid2 = fork();
-   
-     if(pid2==0)
-     printf("this is child PID = %d of parent PID = %d\n", getpid(),getppid()); 
-     else
-     printf("parent exec %d\n",getpid());
 
-    if(pid1>0 && pid2>0)
+    if(pid1==0)
     {
-    printf("\nfinished child pid: %d\n",wait(NULL));
-    printf("\nfinished child pid: %d\n",wait(NULL));
+        if(pid2==0)
+        printf("child of B %d, this is C %d\n",getppid(),getpid());
+        else
+        printf("child of A %d, this is B %d\n",getppid(),getpid());
     }
-    printf("\nwho did this, %d\n",getpid());
+    else
+    {
+        if(pid2==0)
+        printf("child of A %d, this is D %d\n",getppid(),getpid());
+        else
+        printf("this is A %d\n",getpid());
+    }
+
+    while(wait(NULL)!=-1 || errno != ECHILD);
+
     return 0;
 }
